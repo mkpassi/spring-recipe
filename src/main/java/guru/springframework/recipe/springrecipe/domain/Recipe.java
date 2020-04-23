@@ -1,13 +1,6 @@
 package guru.springframework.recipe.springrecipe.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -24,7 +17,10 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
+
+    @Enumerated(value=EnumType.STRING)
     private Difficulty difficulty;
+
     @Lob
     private Byte[] image;
 
@@ -34,6 +30,11 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
+    @ManyToMany
+    @JoinTable(name="recipe_category"
+            , joinColumns = @JoinColumn(name="recipe_id"),
+             inverseJoinColumns = @JoinColumn(name="category_id"))
+    private Set<Category> categories;
 
     public Long getId() {
         return id;
@@ -131,6 +132,14 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Recipe{");
@@ -146,6 +155,7 @@ public class Recipe {
         sb.append(", image=").append(Arrays.toString(image));
         sb.append(", ingredients=").append(ingredients);
         sb.append(", notes=").append(notes);
+        sb.append(", categories=").append(categories);
         sb.append('}');
         return sb.toString();
     }
