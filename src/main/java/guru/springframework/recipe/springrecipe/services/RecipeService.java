@@ -1,11 +1,18 @@
 package guru.springframework.recipe.springrecipe.services;
 
-import guru.springframework.recipe.springrecipe.domain.Recipe;
-
 import java.util.Set;
 
+import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
+import guru.springframework.recipe.springrecipe.domain.Recipe;
+
 public interface RecipeService {
-    Set<Recipe> getRecipes();
 
     Recipe getRecipeById(Long id);
+
+    Set<Recipe> getRecipes();
+
+    RecipeCommand saveRecipe(RecipeCommand recipeCommand);
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com
