@@ -2,9 +2,9 @@ package guru.springframework.recipe.springrecipe.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -18,6 +18,7 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
+    @ToString.Exclude
     private Set<Recipe> recipes;
 
 }
