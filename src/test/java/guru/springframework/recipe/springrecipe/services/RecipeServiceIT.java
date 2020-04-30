@@ -15,8 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @Slf4j
@@ -52,7 +50,7 @@ public class RecipeServiceIT {
 
     //When
     recipeCommand.setDescription(NEW_DESRIPTION);
-    RecipeCommand savedRecipeCommand = recipeService.saveRecipe(recipeCommand);
+    RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
 
     // Then
     log.info("###################################################");

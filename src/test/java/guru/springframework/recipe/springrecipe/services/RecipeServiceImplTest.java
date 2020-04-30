@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.Assert.*;
@@ -46,7 +45,7 @@ public class RecipeServiceImplTest {
       Mockito.when(recipeRepository.save(Mockito.any())).thenReturn(recipe);
       Mockito.when(recipeToRecipeCommand.convert(Mockito.any())).thenReturn(recipeCommand);
 
-      assertNotNull(recipeService.saveRecipe(recipeCommand));
+      assertNotNull(recipeService.saveRecipeCommand(recipeCommand));
 
     }
 

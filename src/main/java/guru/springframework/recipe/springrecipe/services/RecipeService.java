@@ -11,8 +11,9 @@ public interface RecipeService {
 
     Set<Recipe> getRecipes();
 
-    RecipeCommand saveRecipe(RecipeCommand recipeCommand);
+    RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
+
+    RecipeCommand findRecipeCommandById(Long valueOf);
 }
 
 
-//~ Formatted by Jindent --- http://www.jindent.com

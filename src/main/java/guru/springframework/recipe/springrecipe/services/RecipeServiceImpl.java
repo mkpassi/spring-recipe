@@ -32,7 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public RecipeCommand saveRecipe(RecipeCommand recipeCommand) {
+    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
         Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         log.debug("Saved Recipe : {}", savedRecipe);
@@ -40,9 +40,19 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
+    public RecipeCommand findRecipeCommandById(Long recipeId) {
+        Optional<Recipe> recipeById = recipeRepository.findById(recipeId);
+        if(recipeById.isPresent()){
+            return recipeToRecipeCommand.convert(recipeById.get());
+        }else{
+            throw new RuntimeException("Recipe Not found for Id : " + recipeById);
+        }
+    }
+
+    @Override
     public Recipe getRecipeById(Long id) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
-
         if (recipeOptional.isPresent()) {
             return recipeOptional.get();
         } else {
@@ -61,6 +71,3 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeSet;
     }
 }
-
-
-//~ Formatted by Jindent --- http://www.jindent.com
