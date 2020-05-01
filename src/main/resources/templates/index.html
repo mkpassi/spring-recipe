@@ -19,9 +19,9 @@
     <div class="row">
         <div class ="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h1 class="text-center panel-title"> My Recipes</h1>
-                </div>
+                    <div class="panel-heading">
+                        <h1 class="text-center panel-title"> My Recipes</h1>
+                    </div>
                 <div class="panel-body">
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
                         <!--/*@thymesVar id="recipe" type="guru.springframework.recipe.springrecipe.domain.Recipe"*/-->
@@ -48,8 +48,26 @@
                                         View
                                     </a>
                                 </td>
+                                <td class="text-center">
+                                    <a href= "#" th:href="@{'recipe/' + ${recipe.id} +'/update'}">
+                                        Update
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a href= "#" th:href="@{'recipe/' + ${recipe.id} +'/delete'}">
+                                        Delete
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a href= "#" th:href="@{'recipe/' + ${recipe.id} +'/ingredients'}">
+                                        Ingredients
+                                    </a>
+                                </td>
                             </tr>
                         </table>
+                        <a href="#" class="btn btn-info" th:href="@{'/recipe/new'}">
+                            Add New Recipe
+                        </a>
                     </div>
                 </div>
             </div>

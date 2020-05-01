@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.Assert.*;
 
+import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
 import guru.springframework.recipe.springrecipe.converters.RecipeCommandToRecipe;
 import guru.springframework.recipe.springrecipe.converters.RecipeToRecipeCommand;
 import guru.springframework.recipe.springrecipe.domain.Recipe;
@@ -33,20 +33,24 @@ public class RecipeServiceImplTest {
     RecipeServiceImpl     recipeService;
 
     @Test
+    public void deleteRecipeById() {
+        Long idOfRecipeToBeDeleted = 2l;
+        recipeService.deleteById(2l);
+        Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(Mockito.eq(idOfRecipeToBeDeleted));
+    }
+
+    @Test
     public void saveRecipeCommand() {
-      Long recipe_id = 1l;
-      Recipe recipe = new Recipe();
-      recipe.setId(recipe_id);
+        Long   recipe_id = 1l;
+        Recipe recipe    = new Recipe();
+        recipe.setId(recipe_id);
+        RecipeCommand recipeCommand = new RecipeCommand();
 
-      RecipeCommand recipeCommand = new RecipeCommand();
-      recipeCommand.setId(recipe_id);
-
-      Mockito.when(recipeCommandToRecipe.convert(Mockito.any())).thenReturn(recipe);
-      Mockito.when(recipeRepository.save(Mockito.any())).thenReturn(recipe);
-      Mockito.when(recipeToRecipeCommand.convert(Mockito.any())).thenReturn(recipeCommand);
-
-      assertNotNull(recipeService.saveRecipeCommand(recipeCommand));
-
+        recipeCommand.setId(recipe_id);
+        Mockito.when(recipeCommandToRecipe.convert(Mockito.any())).thenReturn(recipe);
+        Mockito.when(recipeRepository.save(Mockito.any())).thenReturn(recipe);
+        Mockito.when(recipeToRecipeCommand.convert(Mockito.any())).thenReturn(recipeCommand);
+        assertNotNull(recipeService.saveRecipeCommand(recipeCommand));
     }
 
     @Test
@@ -92,3 +96,4 @@ public class RecipeServiceImplTest {
 }
 
 
+//~ Formatted by Jindent --- http://www.jindent.com

@@ -92,5 +92,13 @@ public class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
     }
 
+    @Test
+    public void testDeleteRecipeById() throws Exception{
+
+    mvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
+        .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+        .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+    }
+
 
 }
