@@ -4,6 +4,7 @@ import guru.springframework.recipe.springrecipe.commands.IngredientCommand;
 import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
 import guru.springframework.recipe.springrecipe.services.IngredientService;
 import guru.springframework.recipe.springrecipe.services.RecipeService;
+import guru.springframework.recipe.springrecipe.services.UnitOfMeasureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ public class IngredientControllerTest {
 
     @Mock
     IngredientService ingredientService;
+
+    @Mock
+    UnitOfMeasureService unitOfMeasureService;
 
     @InjectMocks
     IngredientController controller;

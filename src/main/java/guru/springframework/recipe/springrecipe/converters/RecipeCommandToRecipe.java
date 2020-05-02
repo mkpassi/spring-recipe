@@ -15,16 +15,16 @@ import lombok.Synchronized;
  */
 @Component
 public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
-    private final CategoryCommandToCategory     categoryConveter;
-    private final IngredientCommandToIngredient ingredientConverter;
-    private final NotesCommandToNotes           notesConverter;
 
-    public RecipeCommandToRecipe(CategoryCommandToCategory categoryConveter,
-                                 IngredientCommandToIngredient ingredientConverter,
+    private final CategoryCommandToCategory categoryConveter;
+    private final IngredientCommandToIngredient ingredientConverter;
+    private final NotesCommandToNotes notesConverter;
+
+    public RecipeCommandToRecipe(CategoryCommandToCategory categoryConveter, IngredientCommandToIngredient ingredientConverter,
                                  NotesCommandToNotes notesConverter) {
-        this.categoryConveter    = categoryConveter;
+        this.categoryConveter = categoryConveter;
         this.ingredientConverter = ingredientConverter;
-        this.notesConverter      = notesConverter;
+        this.notesConverter = notesConverter;
     }
 
     @Synchronized
@@ -36,7 +36,6 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         }
 
         final Recipe recipe = new Recipe();
-
         recipe.setId(source.getId());
         recipe.setCookTime(source.getCookTime());
         recipe.setPrepTime(source.getPrepTime());
@@ -46,25 +45,18 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         recipe.setServings(source.getServings());
         recipe.setSource(source.getSource());
         recipe.setUrl(source.getUrl());
+        recipe.setNotes(notesConverter.convert(source.getNotes()));
 
-        if (notesConverter.convert(source.getNotes()) != null) {
-            recipe.setNotes(notesConverter.convert(source.getNotes()));
-        }else{
-            recipe.setNotes(new Notes());
+        if (source.getCategories() != null && source.getCategories().size() > 0){
+            source.getCategories()
+                    .forEach( category -> recipe.getCategories().add(categoryConveter.convert(category)));
         }
 
-        if ((source.getCategories() != null) && (source.getCategories().size() > 0)) {
-            source.getCategories().forEach(category -> recipe.getCategories().add(categoryConveter.convert(category)));
-        }
-
-        if ((source.getIngredients() != null) && (source.getIngredients().size() > 0)) {
+        if (source.getIngredients() != null && source.getIngredients().size() > 0){
             source.getIngredients()
-                  .forEach(ingredient -> recipe.getIngredients().add(ingredientConverter.convert(ingredient)));
+                    .forEach(ingredient -> recipe.getIngredients().add(ingredientConverter.convert(ingredient)));
         }
 
         return recipe;
     }
 }
-
-
-//~ Formatted by Jindent --- http://www.jindent.com
