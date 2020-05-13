@@ -2,6 +2,7 @@ package guru.springframework.recipe.springrecipe.controllers;
 
 import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
 import guru.springframework.recipe.springrecipe.domain.Recipe;
+import guru.springframework.recipe.springrecipe.exceptions.NotFoundException;
 import guru.springframework.recipe.springrecipe.repositories.RecipeRepository;
 import guru.springframework.recipe.springrecipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +41,12 @@ public class RecipeControllerTest {
     MockMvc mvc;
 
     @BeforeEach
-    public void setup(){
+    public void setup () {
         recipe = new Recipe();
         recipe.setId(recipeId);
-        mvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        mvc = MockMvcBuilders.standaloneSetup(recipeController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -52,6 +55,14 @@ public class RecipeControllerTest {
        mvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
                .andExpect(MockMvcResultMatchers.status().isOk())
                .andExpect(MockMvcResultMatchers.view().name("recipe/show"));
+    }
+
+    @Test
+    public void testGetRecipeNotFOund() throws Exception {
+
+        Mockito.when(recipeService.getRecipeById(recipeId)).thenThrow(NotFoundException.class);
+        mvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test

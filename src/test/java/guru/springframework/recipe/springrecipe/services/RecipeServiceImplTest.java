@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import guru.springframework.recipe.springrecipe.exceptions.NotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
 import guru.springframework.recipe.springrecipe.converters.RecipeCommandToRecipe;
@@ -36,7 +39,7 @@ public class RecipeServiceImplTest {
     public void deleteRecipeById() {
         Long idOfRecipeToBeDeleted = 2l;
         recipeService.deleteById(2l);
-        Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(Mockito.eq(idOfRecipeToBeDeleted));
+        verify(recipeRepository, times(1)).deleteById(eq(idOfRecipeToBeDeleted));
     }
 
     @Test
@@ -47,9 +50,9 @@ public class RecipeServiceImplTest {
         RecipeCommand recipeCommand = new RecipeCommand();
 
         recipeCommand.setId(recipe_id);
-        Mockito.when(recipeCommandToRecipe.convert(Mockito.any())).thenReturn(recipe);
-        Mockito.when(recipeRepository.save(Mockito.any())).thenReturn(recipe);
-        Mockito.when(recipeToRecipeCommand.convert(Mockito.any())).thenReturn(recipeCommand);
+        when(recipeCommandToRecipe.convert(any())).thenReturn(recipe);
+        when(recipeRepository.save(any())).thenReturn(recipe);
+        when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
         assertNotNull(recipeService.saveRecipeCommand(recipeCommand));
     }
 
@@ -59,7 +62,7 @@ public class RecipeServiceImplTest {
         Set<Recipe> recipeData = new HashSet<>();
 
         recipeData.add(recipe);
-        Mockito.when(recipeRepository.findAll()).thenReturn(recipeData);
+        when(recipeRepository.findAll()).thenReturn(recipeData);
 
         Set<Recipe> recipes = recipeService.getRecipes();
 
@@ -67,7 +70,7 @@ public class RecipeServiceImplTest {
         assertNotNull(recipes);
 
         // To verify how many times a method is called use Mockito.verify and Mockito.times.
-        Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
+        verify(recipeRepository, times(1)).findAll();
     }
 
     @Test
@@ -80,15 +83,27 @@ public class RecipeServiceImplTest {
         Set<Recipe> recipeData = new HashSet<>();
 
         recipeData.add(recipe);
-        Mockito.when(recipeRepository.findById(Mockito.eq(recipeId))).thenReturn(Optional.ofNullable(recipe));
+        when(recipeRepository.findById(eq(recipeId))).thenReturn(Optional.ofNullable(recipe));
 
         Recipe savedRecipe = recipeService.getRecipeById(recipeId);
+
 
         System.out.println(savedRecipe);
         assertNotNull(savedRecipe);
 
         // To verify how many times a method is called use Mockito.verify and Mockito.times.
-        Mockito.verify(recipeRepository, Mockito.times(1)).findById(Mockito.eq(recipeId));
+        verify(recipeRepository, times(1)).findById(eq(recipeId));
+    }
+
+    @Test
+    public void testNotFoundException () {
+        RuntimeException exception = Assertions.assertThrows(NotFoundException.class,
+                () -> {
+          Optional<Recipe> emptyOptional = Optional.empty();
+          when(recipeRepository.findById(anyLong())).thenReturn(emptyOptional);
+          RecipeCommand recipe = recipeService.findRecipeCommandById(1l);
+        });
+
     }
 
     @BeforeEach
@@ -96,4 +111,4 @@ public class RecipeServiceImplTest {
 }
 
 
-//~ Formatted by Jindent --- http://www.jindent.com
+

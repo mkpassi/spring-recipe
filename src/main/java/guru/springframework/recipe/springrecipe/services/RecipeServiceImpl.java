@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import guru.springframework.recipe.springrecipe.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import guru.springframework.recipe.springrecipe.commands.RecipeCommand;
@@ -46,7 +47,7 @@ public class RecipeServiceImpl implements RecipeService {
         if(recipeById.isPresent()){
             return recipeToRecipeCommand.convert(recipeById.get());
         }else{
-            throw new RuntimeException("Recipe Not found for Id : " + recipeById);
+            throw new NotFoundException("Recipe Not found for Id : " + recipeId);
         }
     }
 
@@ -61,7 +62,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipeOptional.isPresent()) {
             return recipeOptional.get();
         } else {
-            throw new RuntimeException("Recipe Not Found");
+            throw new NotFoundException("Recipe Not Found for Id :" + id);
         }
     }
 
